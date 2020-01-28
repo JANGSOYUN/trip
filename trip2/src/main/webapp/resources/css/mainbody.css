@@ -1,0 +1,100 @@
+.mainbody input[type="text"]{
+   width:100%;
+   height:50px;
+   border:2px solid #aaa;
+   border-radius:4px;
+   margin:8px 0;
+   outline:none;
+   padding:8px;
+   box-sizing: border-box;
+   transition:.3s; 
+}
+.mainbody input[type=text]:focus{
+   border-color: dodgerBlue;
+   box-shadow:0 0 8px 0 dodgerBlue;
+}
+
+.mainbody select{
+   width:60%;
+   height:50px;
+   border:2px solid #aaa;
+   border-radius:4px;
+   margin:8px 0;
+   outline:none;
+   box-sizing: border-box;
+   transition:.3s; 
+}
+
+
+.mainbody select:focus{
+   border-color: dodgerBlue;
+   box-shadow:0 0 8px 0 dodgerBlue;
+}
+
+.mainbody div{
+    margin: 0 auto;
+}
+
+.inputWithIcon input[type=text]{
+   padding-left:40px;
+}
+.inputWithIcon{
+   position: relative;
+}
+.inputWithIcon i{
+   position:absolute;
+   left:0;
+   top:16px;
+   padding:9px 8px;
+   color:#aaa;
+   transition:.3s;
+}
+.inputWithIcon input[type=text]:focus + i{
+   color:dodgerBlue;
+}
+
+.mainbody a:link { color: black; text-decoration: none;}
+.mainbody a:visited { color: black; text-decoration: none;}
+.mainbody a:hover { color: black; text-decoration: underline;}
+
+.mainbody input[type="submit"]{
+  background:dodgerBlue;
+  color:#fff;
+  border:none;
+  position:relative;
+  height:50px;
+  font-size:1.6em;
+  padding:0 2em;
+  cursor:pointer;
+  transition:800ms ease all;
+  outline:none;
+  vertical-align: sub;
+  border-radius: 5px;
+}
+.mainbody input[type="submit"]:hover{
+  background:#fff;
+  color:dodgerBlue;
+}
+.mainbody input[type="submit"]:before,input[type="submit"]:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: dodgerBlue;
+  transition:400ms ease all;
+}
+.mainbody input[type="submit"]:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+.mainbody input[type="submit"]:hover:before,input[type="submit"]:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+.ui-datepicker { width: 17em; padding: .2em .2em 0; display: none; font-size: 12px}
+.ui-datepicker select.ui-datepicker-year { width: 45%; height: 30px; color: black; font-size: 12px}
+.ui-datepicker select.ui-datepicker-month { width: 40%; height: 30px; color: black; font-size: 12px}
