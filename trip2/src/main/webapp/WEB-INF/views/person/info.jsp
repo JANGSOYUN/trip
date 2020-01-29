@@ -11,29 +11,26 @@
 	<%@include file="/WEB-INF/views/home.jsp" %>
 	<h1>INFO</h1>
 	
-	<table border="1">
-		<tr>
-			<td>ID</td>
-			<td>${sessionScope.login.userid }</td>
-		</tr>
-		<tr>
-			<td>PW</td>
-			<td>****</td>
-		</tr>
-		<tr>
-			<td>NAME</td>
-			<td>${sessionScope.login.username }</td>
-		</tr>
-		<tr>
-			<td>EMAIL</td>
-			<td>${sessionScope.login.useremail }</td>
-		</tr>
-		<tr>
-			<td>PHONE</td>
-			<td>${sessionScope.login.userphone }</td>
+	<table>
+		<tr valign="top">
+			<td style="width: 150px">
+				<jsp:include page="/WEB-INF/views/mypage/leftMenu.jsp"/>
+			</td>
+			<td>
+				ID<br>
+				${sessionScope.login.userid }<br><br>
+				PW<br>
+				${sessionScope.login.userpw }<br><br>
+				NAME<br>
+				${sessionScope.login.username }<br><br>
+				EMAIL<br>
+				${sessionScope.login.useremail }<br><br>
+				PHONE<br>
+				${sessionScope.login.userphone }<br><br>
+			</td>
 		</tr>
 	</table>
-	<p><input type="button" value="정보 수정" onclick="location.replace('mypage')"></p>
+	<p><a href="pwCheck"><button>정보 수정</button></a></p>
 </div>
 </body>
 </html>
