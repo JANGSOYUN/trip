@@ -7,8 +7,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ReviewController {
-	@RequestMapping(value = "review", method = RequestMethod.GET)
-	public ModelAndView review() {
-		return new ModelAndView("review/board");
-	}
+   @RequestMapping(value = "review", method = RequestMethod.GET)
+   public ModelAndView review() {
+      return new ModelAndView("review/board");
+   }
+   
+   @RequestMapping(value = "reviewWriteForm", method = RequestMethod.GET)
+   public ModelAndView reviewWriteForm() {
+      return new ModelAndView("review/reviewWriteForm");
+   }
 }

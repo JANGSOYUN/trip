@@ -34,34 +34,34 @@
       <%@include file="/WEB-INF/views/home.jsp"%>
    </div>
    
-   <form>
+   <!-- 검색 -->
+   <form method="post">
       <div class="inputWithIcon" style="width:400px">
          <input type="text" id="city" name="search" placeholder="도시, 지역, 숙소명, 등으로 검색" autocomplete="off">
          <i class="fa fa-search fa-lg fa-fw" aria-hidden="true"></i>
       </div>
    
-
       <div style="width:400px;">
          <div class="inputWithIcon" style="width:49%; float:left;">
             <!-- 날짜 지정 select 들어갈 곳 -->
-            <input type="text" id="startDate" style="width:100%" placeholder="출발일" autocomplete="off">
+            <input type="text"  id="startDate" name="startDate" style="width:100%" placeholder="출발일" autocomplete="off">
             <i class="fa fa-calendar fa-lg fa-fw" aria-hidden="true"></i>
          </div>
             
          <div class="inputWithIcon" style="width:49%;  float:left; margin-left: 7px">
-            <input type="text" id="endDate" style="width:100%" placeholder="도착일" autocomplete="off">
+            <input type="text" id="endDate" name="endDate" style="width:100%" placeholder="도착일" autocomplete="off">
             <i class="fa fa-calendar fa-lg fa-fw" aria-hidden="true"></i>
          </div>
       </div>
       
       <div style="width:400px">
       <!-- 사람 명수 들어갈 곳 -->
-         <select>
-            <option value="" selected disabled hidden>인원</option>
-            <option value="one">1명</option>
-            <option value="two">2명</option>
-            <option value="three">3명</option>
-            <option value="four">4명</option>
+         <select name="pop">
+            <option value="" selected disabled hidden="hidden">인원</option>
+            <option value="1">1명</option>
+            <option value="2">2명</option>
+            <option value="3">3명</option>
+            <option value="4">4명</option>
          </select>
       
          <input type="submit" name="trans" value="조회">

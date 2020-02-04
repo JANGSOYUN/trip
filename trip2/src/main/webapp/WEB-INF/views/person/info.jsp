@@ -27,10 +27,10 @@
 				${sessionScope.login.useremail }<br><br>
 				PHONE<br>
 				${sessionScope.login.userphone }<br><br>
+				<p><a href="pwCheck"><button>정보 수정</button></a></p>
 			</td>
 		</tr>
 	</table>
-	<p><a href="pwCheck"><button>정보 수정</button></a></p>
 </div>
 </body>
 </html>

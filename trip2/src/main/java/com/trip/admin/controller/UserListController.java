@@ -35,10 +35,4 @@ public class UserListController {
 		model.addAttribute("userreset", reset);
 		return "admin/reset";
 	}
-	
-	// 방 목록
-	@RequestMapping(value="roomlist")
-	public String roomlist() {
-		return "rooms/roomlist";
-	}
 }

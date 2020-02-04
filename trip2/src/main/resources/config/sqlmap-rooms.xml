@@ -1,66 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mappers.RoomsMapper">
-	<insert id="insertRooms" parameterType="rooms">
-		insert into rooms
-		(adults, child, infants, bedroom, bed, bathroom, weekdays, weekend,
-		disabled,
-		hostid, details, amenities, checkin, checkout, address)
-		VALUES (#{adults},
-		#{child}, #{infants}, #{bedroom}, #{bed},
-		#{bathroom}, #{weekdays},
-		#{weekend}, #{disabled},
-		#{hostid},
-		#{details}, #{amenities}, #{checkin}, #{checkout}, #{address})
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rooms">
+
+	<select id="selectRoom" parameterType="int" resultType="rooms">
+		select * from rooms where roomsId = #{roomsId }
+	</select>
+
+
+	<select id="getMaxRoomsId" parameterType="int" resultType="int">
+		select max(roomsId) from rooms
+	</select>
+
+	<insert id="insertRoomsPhoto" parameterType="roomsimg">
+		INSERT INTO roomsimg (roomsId, filedata) VALUES (#{roomsId}, #{filedata})
 	</insert>
 
-	<select id="selectRoomsList" parameterType="java.util.HashMap"
-		resultType="rooms">
+	<update id="updateRoomsPhoto" parameterType="roomsimg">
+		UPDATE roomsimg SET filedata = #{filedata} WHERE roomsId = #{roomsId}
+	</update>
+
+	<select id="selectRoomsPhoto" parameterType="int" resultType="roomsimg">
+		SELECT * FROM roomsimg WHERE roomsId = #{roomsId} 
+	</select>
+
+	<delete id="deleteRoomsPhoto" parameterType="roomsimg">
+		DELETE FROM roomsimg WHERE roomsId = #{roomsId}
+	</delete>
+	
+<!-- 	<insert id="insertRooms" parameterType="rooms"> -->
+<!-- 		INSERT INTO rooms(hostId, details, avail_adults, avail_children, avail_infants, avail_bedroom, avail_bed, avail_bathroom, -->
+<!-- 		amenities, time_checkin, time_checkout, price_weekdays, price_weekend, address, disabled)  -->
+<!-- 		VALUES (#{hostId}, #{details}, #{avail_adults}, #{avail_children}, #{avail_infants}, #{avail_bedroom}, #{avail_bed}, #{avail_bathroom}, -->
+<!-- 		#{amenities}, #{time_checkin}, #{time_checkout}, #{price_weekdays}, #{price_weekend}, #{address}, #{disabled}) -->
+<!-- 	</insert> -->
+	
+	<insert id="insertRooms" parameterType="rooms">
+		INSERT INTO rooms(hostId, details, avail_adults, avail_children, avail_infants, avail_bedroom, avail_bed, avail_bathroom,
+		amenities, time_checkin, time_checkout, price_weekdays, price_weekend, address, disabled) 
+		VALUES (#{hostId, jdbcType=VARCHAR}, #{details, jdbcType=VARCHAR}, #{avail_adults, jdbcType=VARCHAR}, #{avail_children, jdbcType=VARCHAR}, #{avail_infants, jdbcType=VARCHAR}, #{avail_bedroom, jdbcType=VARCHAR}, #{avail_bed, jdbcType=VARCHAR}, #{avail_bathroom, jdbcType=VARCHAR},
+		#{amenities, jdbcType=VARCHAR}, #{time_checkin, jdbcType=VARCHAR}, #{time_checkout, jdbcType=VARCHAR}, #{price_weekdays, jdbcType=VARCHAR}, #{price_weekend, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{disabled, jdbcType=VARCHAR})
+	</insert>
+
+	<select id="selectRoomsList" parameterType="HashMap" resultType="rooms">
 		SELECT * FROM rooms
 		<where>
-			<if test="rv.roomsid != 0">	<!-- rv = RoomVO -->
+			<if test="rv.roomsId != 0">	<!-- rv = RoomsVO -->
 				roomsId = #{rv.roomsId}
 			</if>
-			<if test="rv.hostid != null">
+			<if test="rv.hostId != null">
 				AND hostId like #{rv.hostId}
 			</if>
 			<if test="rv.details != null">
 				AND details like #{rv.details}
 			</if>
-			<if test="rv.adults != 0">
+			<if test="rv.avail_adults != 0">
 				AND avail_adults >= #{rv.avail_adults}
 			</if>
-			<if test="rv.child != 0">
+			<if test="rv.avail_children != 0">
 				AND avail_children >= #{rv.avail_children}
 			</if>
-			<if test="rv.infants != 0">
+			<if test="rv.avail_infants != 0">
 				AND avail_infants >= #{rv.avail_infants}
 			</if>
-			<if test="rv.bedroom != 0">
+			<if test="rv.avail_bedroom != 0">
 				AND avail_bedroom >= #{rv.avail_bedroom}
 			</if>
-			<if test="rv.bed != 0">
+			<if test="rv.avail_bed != 0">
 				AND avail_bed >= #{rv.avail_bed}
 			</if>
-			<if test="rv.bathroom != 0">
+			<if test="rv.avail_bathroom != 0">
 				AND avail_bathroom >= #{rv.avail_bathroom}
 			</if>
 			<if test="rv.amenities != null">
 				AND amenities like #{rv.amenities}
 			</if>
-			<if test="rv.checkin != null">
+			<if test="rv.time_checkin != null">
 				AND time_checkin like #{rv.time_checkin}
 			</if>
-			<if test="rv.checkout != null">
+			<if test="rv.time_checkout != null">
 				AND time_checkout like #{rv.time_checkout}
 			</if>
-			<if test="rv.weekend != 0">
-				AND price_weekdays <![CDATA[<=]]>
-				#{rv.price_weekend}
+			<if test="rv.price_weekend != 0">
+				AND price_weekdays <![CDATA[<=]]> #{rv.price_weekend}
 				AND price_weekdays >= #{rv.price_weekdays}
-				AND
-				price_weekend <![CDATA[<=]]>
-				#{rv.price_weekend}
+				AND price_weekend <![CDATA[<=]]> #{rv.price_weekend}
 				AND price_weekend >= #{rv.price_weekdays}
 			</if>
 			<if test="rv.address != null">
@@ -72,75 +97,64 @@
 			<if test="rv.disabled != 0">
 				AND disabled = {rv.disabled}
 			</if>
-			<if test="checkin != null || checkout != null"> <!-- reservation 예약된 룸 빼기 -->
-				AND rooms.roomsid NOT IN (SELECT distinct roomsid FROM
-				reservation
-				WHERE
-				(#{checkin} <![CDATA[<=]]>
-				checkin and checkin <![CDATA[<]]>
-				#{checkout}) OR
-				(#{checkin} <![CDATA[<]]>
-				checkout and checkout <![CDATA[<=]]>
-				#{checkout}))
+			<if test="checkIn != null || checkOut != null">
+				AND rooms.roomsId NOT IN (SELECT distinct roomsId FROM reservation
+				WHERE (#{checkIn} <![CDATA[<=]]> checkIn 
+				and checkIn <![CDATA[<]]> #{checkOut}) 
+				OR (#{checkIn} <![CDATA[<]]> checkOut and checkOut <![CDATA[<=]]> #{checkOut}))
 			</if>
-			<!-- 수정시 count 쿼리 동일 수정 -->
-			<!-- 어메니티, 가격, 비활성화 재고 -->
 		</where>
-		ORDER BY roomsid desc
+		ORDER BY roomsId desc
 		<if test="paging != null">
-			LIMIT #{paging.offset}, #{paging.dataPerPage} <!-- 페이지 번호 / 페이지당 개시 글수 -->
+			LIMIT #{paging.offset}, #{paging.dataPerPage}
 		</if>
 	</select>
 
 	<!-- 페이징 처리를 위한 검색 카운트 -->
-	<select id="selectRoomsListCount"
-		parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	<select id="selectRoomsListCount" parameterType="HashMap" resultType="Integer">
 		SELECT COUNT(*) FROM rooms
 		<where>
-			<if test="rv.roomsid != 0">
-				roomsid = #{rv.roomsid}
+			<if test="rv.roomsId != 0">
+				roomsId = #{rv.roomsId}
 			</if>
-			<if test="rv.hostid != null">
-				AND hostid like #{rv.hostid}
+			<if test="rv.hostId != null">
+				AND hostId like #{rv.hostId}
 			</if>
 			<if test="rv.details != null">
 				AND details like #{rv.details}
 			</if>
-			<if test="rv.adults != 0">
-				AND adults >= #{rv.adults}
+			<if test="rv.avail_adults != 0">
+				AND avail_adults >= #{rv.avail_adults}
 			</if>
-			<if test="rv.child != 0">
-				AND child >= #{rv.child}
+			<if test="rv.avail_children != 0">
+				AND avail_children >= #{rv.avail_children}
 			</if>
-			<if test="rv.infants != 0">
-				AND infants >= #{rv.infants}
+			<if test="rv.avail_infants != 0">
+				AND avail_infants >= #{rv.avail_infants}
 			</if>
-			<if test="rv.bedroom != 0">
-				AND bedroom >= #{rv.bedroom}
+			<if test="rv.avail_bedroom != 0">
+				AND avail_bedroom >= #{rv.avail_bedroom}
 			</if>
-			<if test="rv.bed != 0">
-				AND bed >= #{rv.bed}
+			<if test="rv.avail_bed != 0">
+				AND avail_bed >= #{rv.avail_bed}
 			</if>
-			<if test="rv.bathroom != 0">
-				AND bathroom >= #{rv.bathroom}
+			<if test="rv.avail_bathroom != 0">
+				AND avail_bathroom >= #{rv.avail_bathroom}
 			</if>
 			<if test="rv.amenities != null">
 				AND amenities like #{rv.amenities}
 			</if>
-			<if test="rv.checkin != null">
-				AND checkin like #{rv.checkin}
+			<if test="rv.time_checkin != null">
+				AND time_checkin like #{rv.time_checkin}
 			</if>
-			<if test="rv.checkout != null">
-				AND checkout like #{rv.checkout}
+			<if test="rv.time_checkout != null">
+				AND time_checkout like #{rv.time_checkout}
 			</if>
-			<if test="rv.weekend != 0">
-				AND weekdays <![CDATA[<=]]>
-				#{rv.weekend}
-				AND weekdays >= #{rv.weekdays}
-				AND
-				weekend <![CDATA[<=]]>
-				#{rv.weekend}
-				AND weekend >= #{rv.weekdays}
+			<if test="rv.price_weekend != 0">
+				AND price_weekdays <![CDATA[<=]]> #{rv.price_weekend}
+				AND price_weekdays >= #{rv.price_weekdays}
+				AND price_weekend <![CDATA[<=]]> #{rv.price_weekend}
+				AND price_weekend >= #{rv.price_weekdays}
 			</if>
 			<if test="rv.address != null">
 				AND address like CONCAT('%', #{rv.address},'%')
@@ -151,62 +165,42 @@
 			<if test="rv.disabled != 0">
 				AND disabled = {rv.disabled}
 			</if>
-			<if test="checkin != null || checkout != null">
-				AND rooms.roomsid NOT IN (SELECT distinct roomsid FROM
-				reservation
-				WHERE
-				(#{checkin} <![CDATA[<=]]>
-				checkin and checkin <![CDATA[<]]>
-				#{checkout}) OR
-				(#{checkin} <![CDATA[<]]>
-				checkout and checkout <![CDATA[<=]]>
-				#{checkout}))
+			<if test="checkIn != null || checkOut != null">
+				AND rooms.roomsId NOT IN (SELECT distinct roomsId FROM reservation
+				WHERE (#{checkIn} <![CDATA[<=]]> checkIn 
+				and checkIn <![CDATA[<]]> #{checkOut}) 
+				OR (#{checkIn} <![CDATA[<]]> checkOut 
+				and checkOut <![CDATA[<=]]> #{checkOut}))
 			</if>
-			<!-- 수정시 count 쿼리 동일 수정 -->
-			<!-- 어메니티, 가격, 비활성화 재고 -->
 		</where>
-		ORDER BY roomsid desc
+		ORDER BY roomsId desc
 	</select>
 
-	<select id="selectMinPrice" resultType="java.lang.Integer">
-		SELECT MIN(weekdays) FROM rooms
+	<select id="selectMinPrice" resultType="Integer">
+		SELECT MIN(price_weekdays) FROM rooms
 	</select>
 
-	<select id="selectMaxPrice" resultType="java.lang.Integer">
-		SELECT MAX(weekend) FROM rooms
+	<select id="selectMaxPrice" resultType="Integer">
+		SELECT MAX(price_weekend) FROM rooms
 	</select>
 
 	<!-- 페이징 처리를 위한 테이블 카운트 -->
-	<select id="totalCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+	<select id="totalCount" parameterType="String" resultType="Integer">
 		SELECT COUNT(*) FROM ${value}
 	</select>
-	
-	<update id="updateRooms" parameterType="rooms">
-		UPDATE rooms SET
-		
-		hostid = #{hostid},
-		details=#{details},
-		adults=#{adults},
-		child`=#{child},
-		infants=#{infants},
-		bedroom= #{bedroom},
-		bed=#{bed},
-		bathroom= #{bathroom},
-		amenities= #{amenities},
-		checkin=#{checkin},
-		checkout=#{checkout},
-		weekdays=#{weekdays},
-		weekend= #{weekend},
-		address=#{address},
-		disabled=#{disabled}
 
-		WHERE roomsId =#{roomsId}
+	<update id="updateRooms" parameterType="rooms">
+		UPDATE rooms SET hostId = #{hostId}, details = #{details}, avail_adults = #{avail_adults}, avail_children = #{avail_children},
+		avail_infants = #{avail_infants}, avail_bedroom = #{avail_bedroom}, avail_bed = #{avail_bed}, avail_bathroom = #{avail_bathroom},
+		amenities = #{amenities}, time_checkin = #{time_checkin}, time_checkout = #{time_checkout}, price_weekdays = #{price_weekdays},
+		price_weekend = #{price_weekend}, address = #{address}, disabled = #{disabled}
+		WHERE roomsId = #{roomsId}
 	</update>
-	
+
 	<delete id="deleteRooms" parameterType="rooms">
-		DELETE FROM rooms WHERE roomsid = #{roomsid}
+		DELETE FROM rooms WHERE roomsId = #{roomsId}
 	</delete>
-	
+
 	<!-- 편의시설 부분 -->
 	<select id="selectAmenities" parameterType="amenities" resultType="amenities">
 		SELECT * FROM amenities_ref
@@ -220,34 +214,43 @@
 		</where>
 		ORDER BY amenities_idx ASC
 	</select>
-	
+
 	<!-- 리뷰 부분 -->
-	<select id="selectRoomsReview" parameterType="java.util.HashMap" resultType="roomsReview">
-		SELECT * FROM review rv INNER JOIN
-		`bnb`.`reservation` rs ON
-		rv.reservationNum = rs.reservationNum
-		INNER JOIN `bnb`.`user` u ON
-		rs.userId = u.userId WHERE
-		rs.roomsId = #{roomsId}
-		ORDER BY reviewDate
-		DESC
+	<select id="selectRoomsReview" parameterType="HashMap" resultType="roomsreview">
+		SELECT * FROM review rv INNER JOIN reservation rs ON rv.reservationNum = rs.reservationNum
+		INNER JOIN person u ON rs.userId = u.userId WHERE rs.roomsId = #{roomsId}
+		ORDER BY reviewDate DESC
 		<if test="paging != null">
 			LIMIT #{paging.offset}, #{paging.dataPerPage}
 		</if>
 	</select>
-	
+
 	<!-- 리뷰 부분 -->
-	<select id="selectRoomsReviewSummary" resultType="com.bit.bnb.rooms.model.RoomsReviewSummaryVO">
-		SELECT roomsId, count(*) reviewCount, avg(scope) avgScope
-		FROM `bnb`.`review` rv
-		INNER
-		JOIN `bnb`.`reservation` rs ON
-		rv.reservationNum =
-		rs.reservationNum
+	<select id="selectRoomsReviewSummary" resultType="roomsreviewsummary">
+		SELECT roomsId, count(*) reviewCount, avg(scope) avgScope FROM review rv
+		INNER JOIN reservation rs ON rv.reservationNum = rs.reservationNum
 		GROUP BY roomsId
 	</select>
+
+	<!-- 리뷰 부분 각 숙소에 대한 리뷰 수 count -->
+	<select id="selectRoomsReviewCount" parameterType="Integer" resultType="Integer">
+		SELECT count(*) reviewCount FROM review rv
+		INNER JOIN reservation rs ON rv.reservationNum = rs.reservationNum
+		WHERE roomsId = #{roomsId}
+	</select>
+
+	<select id="selectRoomsHost" parameterType="person" resultType="person">
+		SELECT * FROM person
+		<where>
+			<if test="userId != null">
+				AND userId = #{userId}
+			</if>
+		</where>
+	</select>
+
 	
-	
-	
-	
+
+	<select id="selectRandomRoom" resultType="rooms">
+		SELECT * FROM rooms where disabled = 0 order by rand() LIMIT 0, 1
+	</select>
 </mapper>

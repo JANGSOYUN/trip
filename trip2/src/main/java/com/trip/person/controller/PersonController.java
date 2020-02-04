@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.trip.person.dao.PersonVO;
+import com.trip.person.dao.SearchVO;
 import com.trip.person.service.PersonService;
 
 @Controller
@@ -27,6 +28,13 @@ public class PersonController {
 		model.addAttribute("loginr", r);
 		return "person/main";
 	}
+	
+	// 방목록
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	   public String home2(Model model, HttpSession session, SearchVO vo) {
+	      model.addAttribute("search", vo);
+	      return "rooms/roomlist";
+	   }
 	
 	// 로그인
 	@RequestMapping(value="login", method=RequestMethod.GET)

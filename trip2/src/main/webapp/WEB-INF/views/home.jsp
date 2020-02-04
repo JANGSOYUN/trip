@@ -36,15 +36,14 @@ nav {
 	<nav>
 		<ul>
 			<c:if test="${empty login }">
-				<li><a href="login">login</a></li>
-				<li><a href="join">join</a></li>
-				<li><a href="map">map</a></li>
-				<li><a href="search">search</a></li>
-				<li><a href="roomlist">roomlist</a></li>
+				<li><a href="login">로그인</a></li>
+				<li><a href="join">회원가입</a></li>
+				<li><a href="registration">숙소 등록</a></li>
+				<li><a href="roomlist">roomlist</a></li> <!-- 삭제 예정 -->
 			</c:if>
 			<c:if test="${!empty login }">
-				<li><a href="logout">logout</a></li>
-				<li><a href="mypage">mypage</a></li>
+				<li><a href="logout">로그아웃</a></li>
+				<li><a href="mypage">마이페이지</a></li>
 			</c:if>
 		</ul>
 		<hr>

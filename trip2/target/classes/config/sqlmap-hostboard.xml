@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hostboard">
+
+	<insert id="insertPost" parameterType="post">
+		insert into hostBoard (userId, title, content, date, viewCnt, commentCnt) 
+		value(#{userId}, #{title}, #{content}, CURRENT_TIMESTAMP, 0, 0)
+	</insert>
+	
+	<!-- hb : hostBoard / u : person -->
+	<select id="selectPost" resultType="post">
+		select hb.postNo, hb.userId, hb.title, hb.content, hb.date, hb.viewCnt, u.nickName, hb.commentCnt 
+		from hostBoard as hb 
+		join person as u on u.userId = hb.userId 
+		where postNo = #{postNo}
+	</select>
+	
+	<!-- hb : hostBoard / u : person -->
+	<select id="getPostList" parameterType="HashMap" resultType="post">
+		<![CDATA[select hb.postNo, hb.userId, hb.title, hb.content, hb.date, hb.viewCnt, u.nickName, hb.commentCnt 
+		from hostBoard as hb 
+		join person as u on u.userId = hb.userId 
+		where postNo > 0 
+		order by postNo desc limit #{firstRow}, #{postCountPerPage}]]>
+	</select>
+	
+	<select id="getPostTotalCount" resultType="int">
+		select postTotalCount from postTotalCount where idx=1
+	</select>
+	
+	<update id="modifyPost" parameterType="modify">
+		update hostBoard set title=#{title}, content = #{content} where postNo = #{postNo}
+	</update>
+	
+	<update id="upPostTotalCount">
+		update postTotalCount set postTotalCount = postTotalCount + 1 where idx=1
+	</update>
+	
+	<update id="downPostTotalCount">
+		update postTotalCount set postTotalCount = postTotalCount - 1 where idx=1
+	</update>
+
+	<delete id="deletePost">
+		delete from hostBoard where postNo = #{postNo}
+	</delete>
+	
+	<update id="upViewCnt">
+		update hostBoard set viewCnt = viewCnt + 1 where postNo = #{postNo}
+	</update>
+
+</mapper>
+
+ 
+        

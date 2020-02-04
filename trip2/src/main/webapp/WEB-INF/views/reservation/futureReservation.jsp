@@ -4,14 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>자동검색완성</title>
-<script type="text/javascript">
-function test(){
-	alert("javascript");
-}
-</script>
+<title>투숙 예정 예약</title>
 </head>
 <body>
-<button onclick="test()">java</button>
+<div style="width: 1000px; margin: 20px auto;">
+<%@include file="/WEB-INF/views/home.jsp" %>
+   <h2>투숙 예정 예약</h2>
+</div>
 </body>
 </html>

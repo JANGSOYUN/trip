@@ -2,7 +2,14 @@ package com.trip.person.dao;
 
 public class PersonVO {
 	private int usernum;
-	private String userid, userpw, username, useremail, userphone;
+	private String userid;
+	private String userpw;
+	private String username;
+	private String useremail;
+	private String userphone;
+	private String nickname;
+	private String userphoto;
+	private String hostid;
 	
 	public int getUsernum() {
 		return usernum;
@@ -39,5 +46,23 @@ public class PersonVO {
 	}
 	public void setUserphone(String userphone) {
 		this.userphone = userphone;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getUserphoto() {
+		return userphoto;
+	}
+	public void setUserphoto(String userphoto) {
+		this.userphoto = userphoto;
+	}
+	public String getHostid() {
+		return hostid;
+	}
+	public void setHostid(String hostid) {
+		this.hostid = hostid;
 	}
 }
