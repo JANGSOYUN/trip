@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="useGeneratedKeys" value="false"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+	
+	<typeAliases>
+		
+		<typeAlias type="com.trip.chatting.dao.AllMessageVO" alias="allmessage"/>
+		<typeAlias type="com.trip.chatting.dao.ChatRoomVO" alias="chatroom"/>
+		<typeAlias type="com.trip.chatting.dao.MessageVO" alias="message"/>
+		
+		<typeAlias type="com.trip.hostboard.dao.CommentVO" alias="comment"/>
+		<typeAlias type="com.trip.hostboard.dao.ModifyCommentVO" alias="modifycomment"/>
+		<typeAlias type="com.trip.hostboard.dao.ModifyVO" alias="modify"/>
+		<typeAlias type="com.trip.hostboard.dao.PageView" alias="pageview"/>
+		<typeAlias type="com.trip.hostboard.dao.PostVO" alias="post"/>
+		
+		<typeAlias type="com.trip.hostpage.dao.EvaluationVO" alias="evaluation"/>
+		<typeAlias type="com.trip.hostpage.dao.MyRoomVO" alias="myroom"/>
+		<typeAlias type="com.trip.hostpage.dao.ReservationRoomUserVO" alias="reservationroomuser"/>
+		
+		<typeAlias type="com.trip.mypage.dao.HistoryVO" alias="history"/>
+		<typeAlias type="com.trip.mypage.dao.ReviewSearchVO" alias="reviewsearch"/>
+		<typeAlias type="com.trip.mypage.dao.ReviewVO" alias="review"/>
+		<typeAlias type="com.trip.mypage.dao.WishVO" alias="wish"/>
+		
+		<typeAlias type="com.trip.person.dao.PersonVO" alias="person"/>
+		
+		<typeAlias type="com.trip.report.dao.ReportVO" alias="report"/>
+		
+		<typeAlias type="com.trip.reservation.dao.ReservationInfo" alias="reservation"/>
+		
+		<typeAlias type="com.trip.rooms.dao.AmenitiesVO" alias="amenities"/>
+		<typeAlias type="com.trip.rooms.dao.RoomsImgVO" alias="roomsimg"/>
+		<typeAlias type="com.trip.rooms.dao.RoomsReviewSummaryVO" alias="roomsreviewsummary"/>
+		<typeAlias type="com.trip.rooms.dao.RoomsReviewVO" alias="roomsreview"/>
+		<typeAlias type="com.trip.rooms.dao.RoomsVO" alias="rooms"/>
+		
+	</typeAliases>
+</configuration>

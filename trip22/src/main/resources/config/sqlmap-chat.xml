@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="chat">
+
+	<insert id="createRoom">
+		insert into message (hostId, userId, roomsId, messagecontent, receive)
+		VALUES (#{hostId}, #{userId}, #{roomsId}, #{messagecontent}, 'H')
+	</insert>
+
+	<select id="isRoom" resultType="chatroom">
+		select * from message
+		WHERE userId = #{userId} and hostId = #{hostId} and roomsId = #{roomsId}
+		limit 1;
+	</select>
+
+	<insert id="insertMessage">
+		insert into message (hostId, userId, roomsId, messagecontent, receive, readCk)
+		values (#{hostId}, #{userId}, #{roomsId}, #{messagecontent}, #{receive}, #{readCk})
+	</insert>
+
+	<select id="getMessageList" resultType="message">
+		select * from message
+		WHERE userId = #{userId} and hostId = #{hostId} and roomsId = #{roomsId} 
+		ORDER BY idx
+	</select>
+
+	<select id="getRoomList" resultType="chatroom">
+		select userId,roomsId,hostId, count(*) unreadcount from message
+		where readCk='F'
+		group by userId, roomsId, hostId having 
+		userId =#{userId} or hostId =#{userId};
+	</select>
+	
+	<!-- se : / me : message / u : person / h : person -->
+	<select id="getAllRoomList" resultType="chatroom">
+		select se.*, me.messagecontent, me.receive, me.readCk, u.userName, u.userPhoto, h.userName hostName, h.userPhoto hostPhoto
+		from (select userId, roomsId, hostId, MaX(idx) idx
+		from message
+		group by userId, roomsId, hostId
+		having userId = #{userId} or hostId = #{userId}) se
+		inner JOIN message me on se.idx = me.idx
+		inner join person u on se.userId = u.userId
+		inner join person h on se.hostId = h.userId 
+		order by me.readCk asc, se.idx desc ;
+	</select>
+	
+	<select id="newChatCK" parameterType="String" resultType="message">
+		select * from message
+		where readCk='F'and (userId =#{userId} or hostId =#{userId});
+	</select>
+
+	<update id="readOkUpdate" parameterType="chatroom">
+		update message SET readCk='T' 
+		where userId = #{userId} and hostId = #{hostId} and roomsId = #{roomsId} 
+		and receive=#{receive}
+	</update>
+
+	<!-- me : message / sa :  -->
+	<select id="UnreadMessageList" resultType="message">
+		select me.idx, me.hostId, me.userId, me.roomsId, me.messagecontent,
+		me.messageDate, sa.unreadCount, me.receive
+		from message me inner join (select Max(idx) idx, userId, roomsId, hostId, count(*) unreadCount
+		from message where readCk='F'
+	</select>
+
+	<select id="devMessageList" resultType="allmessage">
+		select * from allmessage order by idx asc;
+	</select>
+
+	<insert id="allMessageinsert" parameterType="allmessage">
+		insert into allmessage (userName, message) VALUES (#{userName}, #{message});
+	</insert>
+
+</mapper>

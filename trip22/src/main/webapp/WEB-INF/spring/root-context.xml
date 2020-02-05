@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"	destroy-method="close">
+	<property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+	<property name="jdbcUrl" value="jdbc:oracle:thin:@221.164.9.222:1521:orcl" />
+
+<!-- 	리눅스 위 DB -->
+<!-- 	<property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.0.22:1521:orcl" />	 -->
+	
+	<!-- window -->
+<!-- 	<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe" />	 -->
+
+	<property name="user" value="jangwkd" />
+	<property name="password" value="azsxdc123" />
+	<property name="maxPoolSize" value="100" />
+	<property name="maxIdleTime" value="600" />
+	<property name="idleConnectionTestPeriod" value="300" />
+	</bean>	
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		  <property name="dataSource" ref="dataSource" />
+		  
+		  <property name="configLocation" 
+		  			value="classpath:config/mybatis-config.xml" />
+		  			
+		  <property name="mapperLocations">
+		  		<list>
+		  			<value>classpath:config/sqlmap-admin.xml</value>
+<!-- 		  			<value>classpath:config/sqlmap-chat.xml</value> -->
+<!-- 		  			<value>classpath:config/sqlmap-comment.xml</value> -->
+<!-- 		  			<value>classpath:config/sqlmap-history.xml</value> -->
+<!-- 		  			<value>classpath:config/sqlmap-hostboard.xml</value> -->
+<!-- 		  			<value>classpath:config/sqlmap-hostinfo.xml</value> -->
+<!-- 		  			<value>classpath:config/sqlmap-hostpage.xml</value> -->
+		  			<value>classpath:config/sqlmap-person.xml</value>
+		  			<value>classpath:config/sqlmap-rooms.xml</value>
+		  		</list>
+		  </property>
+	</bean>
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+		  destroy-method="clearCache">
+		  <constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	
+	
+	<context:component-scan base-package="com.trip.person.service" />
+	<context:component-scan base-package="com.trip.person.dao" />
+	
+	<context:component-scan base-package="com.trip.rooms.service" />
+	<context:component-scan base-package="com.trip.rooms.dao" />
+	
+	<context:component-scan base-package="com.trip.admin.service" />
+	<context:component-scan base-package="com.trip.admin.dao" />
+	
+	<context:component-scan base-package="com.trip.reservation.dao" />
+	
+</beans>

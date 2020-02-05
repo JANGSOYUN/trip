@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hostInfo">
+
+    <select id="selectOneHostInfo" parameterType="String" resultType="person">
+        select * from person where userId = #{userId}
+    </select>
+    
+    <!-- re : reservation / r : review -->
+    <select id="selectReviewAVG" parameterType="String" resultType="float">
+        select IFNULL(avg(r.scope), -1) from reservation re
+        inner join review r on re.reservationNum = r.reservationNum
+        where re.hostId = #{userId}
+    </select>
+    
+    <!-- r : reservation / r2 : review -->
+    <select id="selectReservation" resultType="int" parameterType="String">
+        select count(*) from reservation r 
+        left outer join review r2 on r.reservationNum = r2.reservationNum 
+        where r.hostId = #{userId} and <![CDATA[ r.checkOut <= current_timestamp ]]> ;
+    </select>
+    
+</mapper>

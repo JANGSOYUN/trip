@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="comment">
+
+	<!-- 댓글 작성 -->
+	<insert id="insertComment" parameterType="comment">
+		insert into commentview (postNo, userId, commentContent, commentDate) 
+		values(#{postNo}, #{userId}, #{commentContent}, sysdate())
+	</insert>
+	
+	<!-- 해당 포스팅의 댓글 받기 -->
+	<!-- comm : commentview  / u : person -->
+	<select id="getCommentList" resultType="comment">
+		select comm.commentNo, comm.postNo, comm.userId, comm.commentContent, comm.commentDate, u.nickName 
+		from commentview as comm 
+		join person as u on u.userId = comm.userId 
+		where postNo = #{postNo} 
+		order by commentNo desc;
+	</select>
+	
+	<!-- 댓글 수정시 내용 받기 -->
+	<select id="getCommentOne" resultType="comment">
+		select * from commentview where commentNo = #{commentNo}
+	</select>
+	
+	<!-- 댓글 수정 -->
+	<update id="modifyComment">
+		update commentview set commentContent = #{commentContent} where commentNo = #{commentNo}
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment">
+		delete from commentview where commentNo = #{commentNo}
+	</delete>
+	
+	<update id="upCommentCnt">
+		update hostBoard set commentCnt = commentCnt + 1 where postNo = #{postNo}
+	</update>
+	
+	<update id="downCommentCnt">
+		update hostBoard set commentCnt = commentCnt - 1 where postNo = #{postNo}
+	</update>
+
+</mapper>
